@@ -11,7 +11,8 @@
 #include "../libs/client_string_sort.h"
 #include "maze.h"
 
-//#define NL 5
+int NW;
+int NL;
 void fase1();
 
 #endif //PROJECT_AED_LP_FASE1_H

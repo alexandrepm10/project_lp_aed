@@ -76,6 +76,8 @@ char* random_string(char *aux, int nchar){
     return aux;
 }
 
+
+
 int **init_dynmatrix_ints(int lines) {
     int **ppaux = (int **) malloc(sizeof(int *) * lines);
     int *paux = NULL;

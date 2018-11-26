@@ -8,8 +8,8 @@ void fase1() {
     char mpath[]="D:\\Universidade\\4Ano\\project_aed_lp\\recursos\\matrix.txt";
     char wpath[]="D:\\Universidade\\4Ano\\project_aed_lp\\recursos\\words.txt";
     char **words=NULL;
-    int NW=0;
-    int NL=0;
+//    int NW=0;
+//    int NL=0;
     words=read_words_file(words, &NW, wpath);
     print_dynarray_words(words, NW);
 

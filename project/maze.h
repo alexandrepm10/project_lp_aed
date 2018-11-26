@@ -16,6 +16,7 @@
 void solveMaze(char **matrix, char **word);
 void print_mat(int sol[2][10]);
 int check_consistency(char **matrix, char *words, int l, int c,int temp);
-void find_path(char **matrix, char *word, int l, int c, int temp);
+void find_path(char **matrix, char *word, int l, int c, int temp, char **path);
+void print_path(char **str, int n);
 
 #endif //PROJECT_AED_LP_MAZE_H
