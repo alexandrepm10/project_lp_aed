@@ -6,20 +6,22 @@
 
 void fase1() {
     char mpath[]="D:\\Universidade\\4Ano\\project_aed_lp\\recursos\\matrix.txt";
-    char wpath[]="D:\\Universidade\\4Ano\\project_aed_lp\\recursos\\words.txt";
+    char wpath[]="D:\\Universidade\\4Ano\\project_aed_lp\\recursos\\en_words.txt";
     char **words=NULL;
+    char **matrix=NULL;
 //    int NW=0;
-//    int NL=0;
-    words=read_words_file(words, &NW, wpath);
+    //int NL=50;
+    NL=50;
+    words=read_words_file(words, wpath);
     print_dynarray_words(words, NW);
 
-    char **matrix=NULL;
-    matrix=read_words_file(words, &NL, mpath);;
+    //matrix=read_matrix_file(words, mpath);;
+    matrix=create_matrix_random(matrix, NL, NL);
     puts("\nSopa de letras\n");
     print_dynarray_matrix(matrix, NL);
+
     words = clienteMSDSORT_WHITHOUT_CUTOFF(words, NW);
     print_dynarray_words(words, NW);
-
     solveMaze(matrix, words);
 
 }

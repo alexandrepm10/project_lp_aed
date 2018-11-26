@@ -8,7 +8,8 @@
 
 char **init_dynmatrix_chars(int lines);
 
-char **read_words_file(char **paux, int *nl, const char *path);
+char **read_words_file(char **paux, const char *path);
+char **read_matrix_file(char **paux, const char *path);
 char *create_copy_dyn_array(char *str);
 void print_dynarray_words(char **str, int nl);
 void print_dynarray_matrix(char **str, int nl);

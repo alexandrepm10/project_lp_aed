@@ -4,14 +4,16 @@
 
 #include <stdlib.h>
 #include "maze.h"
+#include "fase1.h"
 
 void solveMaze(char **matrix, char **word) {
     puts("\nMaze.c\n");
-    for (int k = 0; k < 5; ++k) {
+    printf("\nNW: %d, NL: %d", NW, NL);
+    for (int k = 0; k < NW; ++k) {
         char **path = init_dynmatrix_chars((strlen(*(word+k))+2));
         *(path)=create_copy_dyn_array(*(word+k));
-        for (int j = 0; j < N5; ++j) {
-            for (int i = 0; i < N5; ++i) {
+        for (int j = 0; j < NL; ++j) {
+            for (int i = 0; i < NL; ++i) {
                 if (*(*(matrix+j)+i)==*(*(word+k))){
                     char buffer[20];
                     snprintf(buffer, sizeof(buffer), "[%d - %d]", j, i);
@@ -27,11 +29,11 @@ void solveMaze(char **matrix, char **word) {
 /* Função recursiva para resolver o labirinto */
 void find_path(char **matrix, char *word, int l, int c, int temp, char **path) {
     // if (l,c chegou ao fim) return true
-    if(word[temp]=='\n' ){
+    if(temp>=strlen(word) ){
         char buffer[20];
         snprintf(buffer, sizeof(buffer), "[%d - %d]", l, c);
         *(path+2) = create_copy_dyn_array(buffer);
-        print_path(path, strlen(word)+1);
+        print_path(path, strlen(word)+2);
         return;
     }
 
@@ -108,7 +110,10 @@ void print_path(char **str, int n){
         else if(i == 2){//posicao final
             printf("%s - ", *(str+i));
         }
-        else if (i == 3){//primeira direcao
+        else if (i == 3 && strlen(*(str))==2){//primeira direcao
+            printf("DIRECAO: %s ", *(str+i));
+        }
+        else if (i == 3 && strlen(*(str))>2){//primeira direcao
             printf("DIRECAO: %s -> ", *(str+i));
         }
         else if(i == n-1){//ultima direcao

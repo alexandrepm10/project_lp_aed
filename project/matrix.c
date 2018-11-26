@@ -6,7 +6,9 @@
 #include <malloc.h>
 #include <mem.h>
 #include <stdlib.h>
+#include <time.h>
 #include "matrix.h"
+#include "fase1.h"
 
 char **init_dynmatrix_chars(int lines) {
     char **ppaux = (char **) malloc(sizeof(char *) * lines);
@@ -16,7 +18,7 @@ char **init_dynmatrix_chars(int lines) {
         }
     return ppaux;
 }
-char **read_words_file(char **paux, int *nl, const char *path){
+char **read_words_file(char **paux, const char *path){
     char aux[M100];
     FILE *fp;
     fp = fopen(path, "r");
@@ -24,11 +26,45 @@ char **read_words_file(char **paux, int *nl, const char *path){
         printf("\nErro abrir o ficheiro!!");
     } else {
         printf("\nFicheiro 'words' aberto com sucesso");
-        fscanf(fp, "%d", nl);
-        printf("\n%d\n", *nl);
-        paux=init_dynmatrix_chars(*nl);
-        for (int i = 0; i <= *nl; ++i) {
-            fgets(aux, M100, fp);
+        fscanf(fp, "%d", &NW);
+        printf("\n%d\n", NW);
+        paux=init_dynmatrix_chars(NW);
+        for (int i = 0; i <= NW; ++i) {
+            //fgets(aux, sizeof(aux), fp);
+            if (fgets(aux, sizeof aux, fp) != NULL) {
+                size_t len = strlen(aux);
+                if (len > 0 && aux[len - 1] == '\n') {
+                    aux[--len] = '\0';
+                }
+            }
+            //fscanf(fp, "%s", aux);
+            *(paux + i) = create_copy_dyn_array(aux);
+        }
+        fclose(fp);
+    }
+    return paux;
+}
+
+char **read_matrix_file(char **paux, const char *path){
+    char aux[M100];
+    FILE *fp;
+    fp = fopen(path, "r");
+    if (fp==NULL){
+        printf("\nErro abrir o ficheiro!!");
+    } else {
+        printf("\nFicheiro 'words' aberto com sucesso");
+        fscanf(fp, "%d", &NL);
+        printf("\n%d\n", NL);
+        paux=init_dynmatrix_chars(NL);
+        for (int i = 0; i <= NL; ++i) {
+            //fgets(aux, sizeof(aux), fp);
+            if (fgets(aux, sizeof aux, fp) != NULL) {
+                size_t len = strlen(aux);
+                if (len > 0 && aux[len - 1] == '\n') {
+                    aux[--len] = '\0';
+                }
+            }
+            //fscanf(fp, "%s", aux);
             *(paux + i) = create_copy_dyn_array(aux);
         }
         fclose(fp);
@@ -61,6 +97,7 @@ void print_dynarray_matrix(char **str, int nl){
 
 char **create_matrix_random(char **paux, int nl, int nc){
     char aux[M100];
+    paux=init_dynmatrix_chars(nl);
     for (int i = 0; i < nl; ++i) {
         random_string(aux, nc);
         *(paux + i) = create_copy_dyn_array(aux);
@@ -69,9 +106,11 @@ char **create_matrix_random(char **paux, int nl, int nc){
 }
 
 char* random_string(char *aux, int nchar){
+    time_t t;
+    srand((unsigned) time(&t));
     char letters[26] = {'a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z'};
     for (int i = 0; i < nchar; ++i) {
-        aux[i]=letters[rand()%26];
+        *(aux+i)=letters[rand()%26];
     }
     return aux;
 }
