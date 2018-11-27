@@ -9,13 +9,11 @@ void fase1() {
     char wpath[]="D:\\Universidade\\4Ano\\project_aed_lp\\recursos\\en_words.txt";
     char **words=NULL;
     char **matrix=NULL;
-//    int NW=0;
-    //int NL=50;
     NL=50;
     words=read_words_file(words, wpath);
-    print_dynarray_words(words, NW);
+    //print_dynarray_words(words, NW);
 
-    //matrix=read_matrix_file(words, mpath);;
+    //matrix=read_matrix_file(matrix, mpath);;
     matrix=create_matrix_random(matrix, NL, NL);
     puts("\nSopa de letras\n");
     print_dynarray_matrix(matrix, NL);
