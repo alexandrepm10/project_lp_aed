@@ -78,16 +78,22 @@ char *create_copy_dyn_array(char *str){
 
 void print_dynarray_words(char **str, int nl){
     for (int i = 0; i < nl; ++i) {
-        printf("\nPalavra n[%d]:\t%s",i,  *(str+i));
+        printf("\nPalavra n[%d]:\t%s",i+1,  *(str+i));
     }
 }
 
 void print_dynarray_matrix(char **str, int nl){
     char *aux=NULL;
+    printf("%-4c", ' ');
+    for (int j = 0; j < nl; ++j) {
+        printf("%-4d ", j+1);
+    }
+    printf("\n");
     for (int i = 0; i < nl; ++i) {
         aux=*(str+i);
+        printf("%-4d", i+1);
         for (int j = 0; j < nl; ++j) {
-            printf("[%c] ", *(aux + j));
+            printf("%-4c ", *(aux + j));
         }
         printf("\n");
     }

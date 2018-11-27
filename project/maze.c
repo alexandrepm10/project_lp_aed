@@ -8,7 +8,7 @@
 
 void solveMaze(char **matrix, char **word) {
     puts("\nMaze.c\n");
-    printf("\nNW: %d, NL: %d", NW, NL);
+    printf("\nNumero de palavras: %d, Numero de linhas: %d", NW, NL);
     for (int k = 0; k < NW; ++k) {
         char **path = init_dynmatrix_chars((strlen(*(word+k))+2));
         *(path)=create_copy_dyn_array(*(word+k));
