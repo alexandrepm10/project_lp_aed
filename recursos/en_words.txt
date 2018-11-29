@@ -95,6 +95,6 @@ vat
 pat
 log
 bet
-run
+ana
 fk
 ae

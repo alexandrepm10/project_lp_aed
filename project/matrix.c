@@ -86,12 +86,12 @@ void print_dynarray_matrix(char **str, int nl){
     char *aux=NULL;
     printf("%-4c", ' ');
     for (int j = 0; j < nl; ++j) {
-        printf("%-4d ", j+1);
+        printf("%-4d ", j);
     }
     printf("\n");
     for (int i = 0; i < nl; ++i) {
         aux=*(str+i);
-        printf("%-4d", i+1);
+        printf("%-4d", i);
         for (int j = 0; j < nl; ++j) {
             printf("%-4c ", *(aux + j));
         }

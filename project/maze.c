@@ -9,8 +9,11 @@
 void solveMaze(char **matrix, char **word) {
     puts("\nMaze.c\n");
     printf("\nNumero de palavras: %d, Numero de linhas: %d", NW, NL);
+    int nwordf=0;
+    char **path;
+    char **spath=init_dynmatrix_chars(1);
     for (int k = 0; k < NW; ++k) {
-        char **path = init_dynmatrix_chars((strlen(*(word+k))+2));
+        path = init_dynmatrix_chars((strlen(*(word+k))+2));
         *(path)=create_copy_dyn_array(*(word+k));
         for (int j = 0; j < NL; ++j) {
             for (int i = 0; i < NL; ++i) {
@@ -18,7 +21,8 @@ void solveMaze(char **matrix, char **word) {
                     char buffer[20];
                     snprintf(buffer, sizeof(buffer), "[%d - %d]", j, i);
                     *(path+1) = create_copy_dyn_array(buffer);
-                    find_path(matrix, *(word+k), j, i, 1, path);
+                    find_path(matrix, *(word+k), j, i, 1, path, spath, &nwordf);
+                    printf("\n%d", nwordf);
                 }
             }
         }
@@ -27,65 +31,69 @@ void solveMaze(char **matrix, char **word) {
 
 
 /* Função recursiva para resolver o labirinto */
-void find_path(char **matrix, char *word, int l, int c, int temp, char **path) {
+int find_path(char **matrix, char *word, int l, int c, int temp, char **path, char **spath, int *k) {
     // if (l,c chegou ao fim) return true
     if(temp>=strlen(word) ){
         char buffer[20];
         snprintf(buffer, sizeof(buffer), "[%d - %d]", l, c);
         *(path+2) = create_copy_dyn_array(buffer);
-        print_path(path, strlen(word)+2);
-        return;
+        print_path(path, strlen(word)+2, *k);
+        spath = resize_dynarray_chars(spath, *k, *k+1);
+        *(spath+*k)=create_copy_dyn_array(*path);
+        *k=*k+1;
+        return 1;
     }
 
     //Cima
     if (check_consistency(matrix, word, l - 1, c ,temp)) {
         char *buffer="N";
         *(path + temp+2)=create_copy_dyn_array(buffer);
-        find_path(matrix, word, l - 1, c, temp+1, path);
+        find_path(matrix, word, l - 1, c, temp+1, path, spath, k);
 
     }
     //Cima-Direita
     if (check_consistency(matrix, word, l - 1, c + 1 , temp)) {
         char *buffer="NE";
         *(path + temp+2)=create_copy_dyn_array(buffer);
-        find_path(matrix, word, l - 1, c + 1, temp+1, path);
+        find_path(matrix, word, l - 1, c + 1, temp+1, path, spath, k);
     }
     //Direita
     if (check_consistency(matrix, word, l, c + 1 , temp)) {
         char *buffer="E";
         *(path + temp+2)=create_copy_dyn_array(buffer);
-        find_path(matrix, word, l, c+1, temp+1, path);
+        find_path(matrix, word, l, c+1, temp+1, path, spath, k);
     }
     //Baixo-Direita
     if (check_consistency(matrix, word, l + 1, c + 1 , temp)) {
         char *buffer="SE";
         *(path + temp+2)=create_copy_dyn_array(buffer);
-        find_path(matrix, word, l + 1, c+1, temp+1, path);
+        find_path(matrix, word, l + 1, c+1, temp+1, path, spath, k);
     }
     //Baixo
     if (check_consistency(matrix, word, l +1, c , temp)) {
         char *buffer="S";
         *(path + temp+2)=create_copy_dyn_array(buffer);
-        find_path(matrix, word, l + 1, c, temp+1, path);
+        find_path(matrix, word, l + 1, c, temp+1, path, spath, k);
     }
     //Baixo-Esquerda
     if (check_consistency(matrix, word, l +1, c - 1 , temp)) {
         char *buffer="SW";
         *(path + temp+2)=create_copy_dyn_array(buffer);
-        find_path(matrix, word, l + 1, c - 1, temp+1, path);
+        find_path(matrix, word, l + 1, c - 1, temp+1, path, spath, k);
     }
     //Esquerda
     if (check_consistency(matrix, word, l, c-1 , temp)) {
         char *buffer="W";
         *(path + temp+2)=create_copy_dyn_array(buffer);
-        find_path(matrix, word, l, c-1, temp+1, path);
+        find_path(matrix, word, l, c-1, temp+1, path, spath, k);
     }
     //Cima-Esquerda
     if (check_consistency(matrix, word, l - 1, c-1 , temp)) {
         char *buffer="NW";
         *(path + temp+2)=create_copy_dyn_array(buffer);
-        find_path(matrix, word, l-1, c-1, temp+1, path);
+        find_path(matrix, word, l-1, c-1, temp+1, path, spath, k);
     }
+    return 0;
 }
 
 /* Verifica se as coordenadas ainda estão dentro do labirinto */
@@ -98,31 +106,41 @@ int check_consistency(char **matrix, char *words, int l, int c, int temp){
     return 0;
 }
 
-void print_path(char **str, int n){
+void print_path(char **str, int n, int k){
     printf("\n");
+    char aux[M100];
     for (int i = 0; i < n; i++) {
         if (i == 0){//palavra
-            printf("%s - ", *(str+i));
+            snprintf(aux, sizeof(aux), "%s - ", *(str+i));
+//            printf("%s - ", *(str+i));
         }
         else if(i == 1){//posicao inicial
-            printf("%s -> ", *(str+i));
+            snprintf(aux, sizeof(aux), "%s %s -> ", aux, *(str+i));
+//            printf("%s -> ", *(str+i));
         }
         else if(i == 2){//posicao final
-            printf("%s - ", *(str+i));
+            snprintf(aux, sizeof(aux), "%s %s - ", aux, *(str+i));
+//            printf("%s - ", *(str+i));
         }
         else if (i == 3 && strlen(*(str))==2){//primeira direcao
-            printf("DIRECAO: %s ", *(str+i));
+            snprintf(aux, sizeof(aux), "%s DIRECAO: %s ", aux, *(str+i));
+//            printf("DIRECAO: %s ", *(str+i));
         }
         else if (i == 3 && strlen(*(str))>2){//primeira direcao
-            printf("DIRECAO: %s -> ", *(str+i));
+            snprintf(aux, sizeof(aux), "%s DIRECAO: %s -> ", aux, *(str+i));
+//            printf("DIRECAO: %s -> ", *(str+i));
         }
         else if(i == n-1){//ultima direcao
-            printf("%s", *(str+i));
+            snprintf(aux, sizeof(aux), "%s %s", aux, *(str+i));
+//            printf("%s", *(str+i));
         }
         else {//restantes direcoes
-            printf("%s -> ", *(str+i));
+            snprintf(aux, sizeof(aux), "%s %s -> ", aux, *(str+i));
+//            printf("%s -> ", *(str+i));
         }
     }
+    *str = create_copy_dyn_array(aux);
+    //printf("\n%s", *str);
 }
 
 /* A utility function to print solution matrix sol[N5][N5] */
@@ -132,4 +150,18 @@ void print_mat(int sol[2][10]) {
             printf(" %d ", sol[i][j]);
         printf("\n");
     }
+}
+
+char **resize_dynarray_chars(char **pchar, int size, int newSize){
+    char **ptr=init_dynmatrix_chars(newSize);
+    for (int i = 0; i < size; ++i) {
+        printf("\nteste {%s}", *(pchar+i));
+        *(ptr+i) = create_copy_dyn_array(*(pchar+i));
+    }
+    char *paux = NULL;
+    for (int i = 0; i < newSize; ++i) {
+        *(ptr + i) = paux;
+    }
+    free(pchar);
+    return ptr;
 }
