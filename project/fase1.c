@@ -9,7 +9,7 @@ void fase1() {
     char wpath[]="D:\\Universidade\\4Ano\\project_aed_lp\\recursos\\en_words.txt";
     char **words=NULL;
     char **matrix=NULL;
-    NL=20;
+    NL=24;
     words=read_words_file(words, wpath);
     //print_dynarray_words(words, NW);
 

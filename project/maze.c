@@ -21,7 +21,10 @@ void solveMaze(char **matrix, char **word) {
                     snprintf(buffer, sizeof(buffer), "[%d - %d]", j, i);
                     *(path+1) = create_copy_dyn_array(buffer);
                     find_path(matrix, *(word+k), j, i, 1, path, spath, &nwordf);
-//                    printf("\n%s", *(spath+nwordf));
+                    //printf("\n%d", nwordf);
+                    if(spath!=NULL) {
+                        printf("\n%s", *(spath + nwordf));
+                    }
                 }
             }
         }
@@ -36,9 +39,9 @@ int find_path(char **matrix, char *word, int l, int c, int temp, char **path, ch
         char buffer[20];
         snprintf(buffer, sizeof(buffer), "[%d - %d]", l, c);
         *(path+2) = create_copy_dyn_array(buffer);
-        print_path(path, spath, (strlen(word)+2), *k);
-//        free(path);
-//        *k=*k+1;
+        spath=print_path(path, spath, (strlen(word)+2), *k);
+        free(path);
+        *k=*k+1;
         return 1;
     }
 
@@ -104,41 +107,43 @@ int check_consistency(char **matrix, char *words, int l, int c, int temp){
     return 0;
 }
 
-void print_path(char **str, char **spath, int n, int k){
+char **print_path(char **str, char **spath, int n, int k){
     printf("\n");
     char aux[M100];
     for (int i = 0; i < n; i++) {
         if (i == 0){//palavra
-//            snprintf(aux, sizeof(aux), "%s - ", *(str+i));
-            printf("%s - ", *(str+i));
+            snprintf(aux, sizeof(aux), "%s - ", *(str+i));
+//            printf("%s - ", *(str+i));
         }
         else if(i == 1){//posicao inicial
-//            snprintf(aux, sizeof(aux), "%s %s -> ", aux, *(str+i));
-            printf("%s -> ", *(str+i));
+            snprintf(aux, sizeof(aux), "%s %s -> ", aux, *(str+i));
+//            printf("%s -> ", *(str+i));
         }
         else if(i == 2){//posicao final
-//            snprintf(aux, sizeof(aux), "%s %s - ", aux, *(str+i));
-            printf("%s - ", *(str+i));
+            snprintf(aux, sizeof(aux), "%s %s - ", aux, *(str+i));
+//            printf("%s - ", *(str+i));
         }
         else if (i == 3 && strlen(*(str))==2){//primeira direcao
-//            snprintf(aux, sizeof(aux), "%s DIRECAO: %s ", aux, *(str+i));
-            printf("DIRECAO: %s ", *(str+i));
+            snprintf(aux, sizeof(aux), "%s DIRECAO: %s ", aux, *(str+i));
+//            printf("DIRECAO: %s ", *(str+i));
         }
         else if (i == 3 && strlen(*(str))>2){//primeira direcao
-//            snprintf(aux, sizeof(aux), "%s DIRECAO: %s -> ", aux, *(str+i));
-            printf("DIRECAO: %s -> ", *(str+i));
+            snprintf(aux, sizeof(aux), "%s DIRECAO: %s -> ", aux, *(str+i));
+//            printf("DIRECAO: %s -> ", *(str+i));
         }
         else if(i == n-1){//ultima direcao
-//            snprintf(aux, sizeof(aux), "%s %s", aux, *(str+i));
-            printf("%s", *(str+i));
+            snprintf(aux, sizeof(aux), "%s %s", aux, *(str+i));
+//            printf("%s", *(str+i));
         }
         else {//restantes direcoes
-//            snprintf(aux, sizeof(aux), "%s %s -> ", aux, *(str+i));
-            printf("%s -> ", *(str+i));
+            snprintf(aux, sizeof(aux), "%s %s -> ", aux, *(str+i));
+//            printf("%s -> ", *(str+i));
         }
     }
-//    spath=resize_dynarray_chars(spath, k, k+1);
+    //printf("\n%s", aux);
+    spath=resize_dynarray_chars(spath, k-1, k);
 //    *(spath+k)=create_copy_dyn_array(aux);
+    return spath;
 }
 
 /* A utility function to print solution matrix sol[N5][N5] */
