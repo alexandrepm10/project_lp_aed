@@ -38,7 +38,7 @@ char **read_words_file(char **paux, const char *path){
                 }
             }
             //fscanf(fp, "%s", aux);
-            *(paux + i) = create_copy_dyn_array(aux);
+            *(paux + i) = create_copy_dyn_array(strupr(aux));
         }
         fclose(fp);
     }
@@ -52,9 +52,9 @@ char **read_matrix_file(char **paux, const char *path){
     if (fp==NULL){
         printf("\nErro abrir o ficheiro!!");
     } else {
-        printf("\nFicheiro 'words' aberto com sucesso");
-        fscanf(fp, "%d", &NL);
-        printf("\n%d\n", NL);
+        printf("\nFicheiro 'Matrix' aberto com sucesso");
+        fscanf(fp, "%d%d", &NL, &NC);
+        printf("\n%d %d\n", NL, NC);
         paux=init_dynmatrix_chars(NL);
         for (int i = 0; i <= NL; ++i) {
             if (fgets(aux, sizeof aux, fp) != NULL) {
@@ -63,7 +63,7 @@ char **read_matrix_file(char **paux, const char *path){
                     aux[--len] = '\0';
                 }
             }
-            *(paux + i) = create_copy_dyn_array(aux);
+            *(paux + i) = create_copy_dyn_array(strupr(aux));
         }
         fclose(fp);
     }
@@ -82,17 +82,17 @@ void print_dynarray_words(char **str, int nl){
     }
 }
 
-void print_dynarray_matrix(char **str, int nl){
+void print_dynarray_matrix(char **str, int nl, int nc){
     char *aux=NULL;
     printf("%-4c", ' ');
-    for (int j = 0; j < nl; ++j) {
+    for (int j = 0; j < nc; ++j) {
         printf("%-4d ", j);
     }
     printf("\n");
     for (int i = 0; i < nl; ++i) {
         aux=*(str+i);
         printf("%-4d", i);
-        for (int j = 0; j < nl; ++j) {
+        for (int j = 0; j < nc; ++j) {
             printf("%-4c ", *(aux + j));
         }
         printf("\n");
@@ -132,3 +132,44 @@ int *using_malloc_create_dynarray_ints(int n) {
     return ptr;
     //return calloc(n, sizeof(int));
 }
+
+
+int **resize_dynarray_ints(int **pints, int size, int newSize){
+    int **ptr=init_dynmatrix_ints(newSize);
+    for (int i = 0; i < size; ++i) {
+        *(ptr+i)=*(pints+i);
+    }
+    for (int j = size; j < newSize; ++j) {
+        *(ptr+j)=0;
+    }
+    free(pints);
+    return ptr;
+}
+
+int **create_or_resize_dynmatrix_int(int **ppi, int *path) {
+    int **paux;
+    if (ppi == NULL) {
+        paux = (int **) malloc(sizeof(int *) * 1);
+        //paux = init_dynmatrix_ints(1);
+        *(paux)=create_dynarray_ints(sizeof(path));
+        *(paux) = path;
+        return paux;
+    }
+    paux=init_dynmatrix_ints(sizeof(ppi)+1);            //size é sempre o numero de colunas
+
+    for (int k = 0; k < (sizeof(ppi)/sizeof(*ppi)); ++k) {
+            *(paux+k)=*(ppi+k);
+    }
+    *(paux+(sizeof(ppi)/sizeof(*ppi)))=path;
+    free(ppi);
+    return paux;
+}
+
+int *create_dynarray_ints(int size) {
+    int *paux = (int *) malloc(size * sizeof(int));
+    for (int i = 0; i < size; ++i) {
+        *(paux + i) = 0;
+    }
+    return paux;
+}
+

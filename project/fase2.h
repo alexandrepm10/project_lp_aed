@@ -11,6 +11,24 @@
 #include "stdlib.h"
 #include "matrix.h"
 
+typedef struct Point {
+	char letter;
+	int x;
+	int y;
+} POINT;
+
+typedef struct Coord {
+	struct Point N;
+	struct Point NE;
+	struct Point E;
+	struct Point SE;
+	struct Point S;
+	struct Point SW;
+	struct Point W;
+	struct Point NW;
+} COORD;
+
 void fase2();
+
 
 #endif //PROJECT_AED_LP_FASE2_H

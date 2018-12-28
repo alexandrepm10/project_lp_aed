@@ -13,6 +13,7 @@
 
 int NW;
 int NL;
+int NC;
 void fase1();
 
 #endif //PROJECT_AED_LP_FASE1_H

@@ -20,4 +20,4 @@ add_executable(project_aed_lp main.c
                 libs/client_string_sort.c
                 libs/client_string_sort.h
                 libs/stringsorting.c
-                libs/stringsorting.h)
+                libs/stringsorting.h project/fase2/words.c project/fase2/words.h)
